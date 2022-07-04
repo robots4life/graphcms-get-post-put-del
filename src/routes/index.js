@@ -46,8 +46,8 @@ export async function post() {
 
 	// https://github.com/prisma-labs/graphql-request#passing-headers-in-each-request
 	// https://github.com/prisma-labs/graphql-request#graphql-mutations
-	const query = gql`
-		mutation AddMessage($name: String!, $text: String!, $price: Int!) {
+	const createMessage = gql`
+		mutation createMessage($name: String!, $text: String!, $price: Int!) {
 			createMessage(data: { name: $name, text: $text, price: $price }) {
 				id
 				name
@@ -60,7 +60,7 @@ export async function post() {
 	const variables = {
 		name: 'Bob',
 		text: 'GraphCMS Message Frontend',
-		price: 52
+		price: Date.now()
 	};
 	console.log(variables);
 
@@ -74,13 +74,35 @@ export async function post() {
 
 	try {
 		// Overrides the clients headers with the passed values
-		const data = await client.request(query, variables, requestHeaders);
+		const data = await client.request(createMessage, variables, requestHeaders);
 		// console.log(data);
 		console.log(JSON.stringify(data, undefined, 2));
 
 		console.log(data.createMessage.id);
 
-		if (data) return { status: 200, body: data };
+		const publishMessage = gql`
+			mutation publishMessage($id: ID!) {
+				publishMessage(where: { id: $id }, to: PUBLISHED) {
+					id
+				}
+			}
+		`;
+
+		const messageID = {
+			id: data.createMessage.id
+		};
+		console.log(messageID);
+
+		const publishedMessage = await client.request(publishMessage, messageID, requestHeaders);
+		// console.log(data);
+		console.log(JSON.stringify(publishedMessage, undefined, 2));
+
+		if (publishedMessage) {
+			return {
+				status: 200,
+				body: publishedMessage
+			};
+		}
 	} catch (error) {
 		console.error(JSON.stringify(error, undefined, 2));
 		return {
