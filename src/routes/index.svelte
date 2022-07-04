@@ -1,6 +1,6 @@
 <script>
-	export const API_URL = process.env['JSON_PLACEHOLDER_ENDPOINT'];
-	console.log(API_URL);
+	// export const API_URL = process.env['JSON_PLACEHOLDER_ENDPOINT'];
+	// console.log(API_URL);
 
 	let text = 'Lorem Ipsum From Frontend.';
 	let payload;
@@ -33,7 +33,7 @@
 		}
 	}
 
-	export let messageCreated;
+	export let data;
 </script>
 
 <h1 class="text-6xl">Contact Us Now</h1>
@@ -42,4 +42,4 @@
 <br />
 <button class="text-4xl border-spacing-4" on:click="{() => createMessage()}">Create Message</button>
 <hr />
-{JSON.stringify(messageCreated, null, 2)}
+{JSON.stringify(data, null, 2)}

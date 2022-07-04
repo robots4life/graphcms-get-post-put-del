@@ -35,47 +35,57 @@ import { gql } from 'graphql-request';
 // 	}
 // }
 
-export async function post({ request }) {
+// export async function post({ request }) {
+export async function post() {
+	// console.log(Date.now());
+	// console.log(request.url);
+	// console.log(request.url.href);
+
+	// const messageData = await request.json();
+	// console.log(messageData);
+
+	// https://github.com/prisma-labs/graphql-request#passing-headers-in-each-request
+	// https://github.com/prisma-labs/graphql-request#graphql-mutations
+	const query = gql`
+		mutation AddMessage($name: String!, $text: String!, $price: Int!) {
+			createMessage(data: { name: $name, text: $text, price: $price }) {
+				id
+				name
+				text
+				price
+			}
+		}
+	`;
+
+	const variables = {
+		name: 'Bob',
+		text: 'Lorem Ipsum!',
+		price: 52
+	};
+	console.log(variables);
+
+	const GRAPH_CMS_MESSAGE_TOKEN = process.env['GRAPH_CMS_MESSAGE_TOKEN'];
+	// console.log(GRAPH_CMS_MESSAGE_TOKEN);
+
+	const requestHeaders = {
+		authorization: `Bearer ${GRAPH_CMS_MESSAGE_TOKEN}`
+	};
+	console.log(requestHeaders);
+
 	try {
-		console.log(Date.now());
-		console.log(request.url);
-		// console.log(request.url.href);
+		// Overrides the clients headers with the passed values
+		const data = await client.request(query, variables, requestHeaders);
+		console.log(data);
+		console.log(JSON.stringify(data, undefined, 2));
 
-		console.log('contact index.js - CreateMessage');
-
-		const messageData = await request.json();
-		console.log(JSON.stringify(messageData)); // {"text":"123"}
-
-		const createMessage = gql`
-			mutation CreateMessage($messageData: Json!) {
-				createMessage(data: $messageData) {
-					id
-					text
-				}
-			}
-		`;
-
-		const GRAPH_CMS_MESSAGE_TOKEN = process.env['GRAPH_CMS_MESSAGE_TOKEN'];
-		console.log(GRAPH_CMS_MESSAGE_TOKEN);
-
-		const headers = {
-			authorization: `Bearer ${GRAPH_CMS_MESSAGE_TOKEN}`
-		};
-
-		const messageCreated = await client.request(
-			createMessage,
-			{ messageData: JSON.stringify(messageData) },
-			headers
-		);
-		console.log(messageCreated);
-
-		return {
-			status: 200,
-			body: {
-				messageCreated
-			}
-		};
+		// return {
+		// 	status: 200,
+		// 	body: {
+		// 		data
+		// 	}
+		// };
 	} catch (error) {
+		console.error(JSON.stringify(error, undefined, 2));
 		return {
 			status: 500,
 			body: {
