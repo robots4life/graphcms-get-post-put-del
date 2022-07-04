@@ -32,6 +32,8 @@
 			console.log(error);
 		}
 	}
+
+	export let messageCreated;
 </script>
 
 <h1 class="text-6xl">Contact Us Now</h1>
@@ -39,3 +41,5 @@
 <input class="text-4xl" type="text" label="name" name="name" bind:value="{text}" />
 <br />
 <button class="text-4xl border-spacing-4" on:click="{() => createMessage()}">Create Message</button>
+<hr />
+{JSON.stringify(messageCreated, null, 2)}
