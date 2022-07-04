@@ -78,6 +78,8 @@ export async function post() {
 		// console.log(data);
 		console.log(JSON.stringify(data, undefined, 2));
 
+		console.log(data.createMessage.id);
+
 		if (data) return { status: 200, body: data };
 	} catch (error) {
 		console.error(JSON.stringify(error, undefined, 2));
