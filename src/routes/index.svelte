@@ -1,8 +1,5 @@
 <script>
-	// export const API_URL = process.env['JSON_PLACEHOLDER_ENDPOINT'];
-	// console.log(API_URL);
-
-	let text = 'Lorem Ipsum From Frontend.';
+	let text = 'Hello World';
 	let payload;
 	let payloadJSON;
 
@@ -19,21 +16,21 @@
 		try {
 			const response = await fetch('/', {
 				method: 'POST',
-				// can be included, not a must
+				//
 				headers: {
 					'Content-Type': 'application/json'
 				},
 				body: payloadJSON
 			});
 
+			const { publishedMessage } = await response.json();
+			console.log(publishedMessage);
 			//
 		} catch (error) {
 			console.log('ERROR');
 			console.log(error);
 		}
 	}
-
-	export let data;
 </script>
 
 <h1 class="text-6xl">Contact Us Now</h1>
@@ -42,4 +39,3 @@
 <br />
 <button class="text-4xl border-spacing-4" on:click="{() => createMessage()}">Create Message</button>
 <hr />
-{JSON.stringify(data, null, 2)}
