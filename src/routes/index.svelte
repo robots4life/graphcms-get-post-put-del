@@ -45,6 +45,7 @@
 			const url = '/api.json';
 			const response = await fetch(url);
 			const latestMessages = await response.json();
+			console.log(latestMessages);
 			messages = latestMessages;
 			//
 			cursorWait = false;
@@ -106,5 +107,8 @@
 <style>
 	.cursorWait {
 		cursor: wait;
+	}
+	:global(body) {
+		height: 100vh;
 	}
 </style>

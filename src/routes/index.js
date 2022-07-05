@@ -17,7 +17,7 @@ export async function get() {
 			}
 		`;
 		const messages = await client.request(getMessages);
-		console.log(messages);
+		// console.log(messages);
 
 		return {
 			status: 200,
@@ -61,7 +61,7 @@ export async function post() {
 		const messageID = { id: createdMessage.createMessage.id };
 		const publishedMessage = await client.request(publishMessage, messageID, requestHeaders);
 		let returnedMessage = JSON.stringify(publishedMessage);
-		// console.log(returnedMessage);
+		console.log(returnedMessage);
 
 		return {
 			status: 200,
