@@ -55,6 +55,8 @@
 	export let messages;
 </script>
 
+<svelte:body class:cursorWait />
+
 <h1 class="text-6xl">Contact Us Now</h1>
 
 <input
