@@ -1,7 +1,10 @@
 import { client } from '$lib/graphql-client';
 import { gql } from 'graphql-request';
 
-export async function get(request) {
+const GRAPH_CMS_MESSAGE_TOKEN = process.env['GRAPH_CMS_MESSAGE_TOKEN'];
+const requestHeaders = { authorization: 'Bearer ' + GRAPH_CMS_MESSAGE_TOKEN };
+
+export async function get() {
 	try {
 		const getMessages = gql`
 			query getMessages {
@@ -14,11 +17,11 @@ export async function get(request) {
 			}
 		`;
 		const messages = await client.request(getMessages);
+		// console.log(messages);
+
 		return {
 			status: 200,
-			body: {
-				messages
-			}
+			body: messages
 		};
 	} catch (error) {
 		return {
@@ -30,7 +33,7 @@ export async function get(request) {
 	}
 }
 
-export async function post({ request }) {
+export async function post() {
 	const createMessage = gql`
 		mutation createMessage($name: String!, $text: String!, $price: Int!) {
 			createMessage(data: { name: $name, text: $text, price: $price }) {
@@ -46,8 +49,6 @@ export async function post({ request }) {
 		text: '27',
 		price: Date.now()
 	};
-	const GRAPH_CMS_MESSAGE_TOKEN = process.env['GRAPH_CMS_MESSAGE_TOKEN'];
-	const requestHeaders = { authorization: 'Bearer ' + GRAPH_CMS_MESSAGE_TOKEN };
 	try {
 		const createdMessage = await client.request(createMessage, variables, requestHeaders);
 		const publishMessage = gql`
@@ -59,16 +60,17 @@ export async function post({ request }) {
 		`;
 		const messageID = { id: createdMessage.createMessage.id };
 		const publishedMessage = await client.request(publishMessage, messageID, requestHeaders);
-
 		let returnedMessage = JSON.stringify(publishedMessage);
-		console.log(returnedMessage);
+		// console.log(returnedMessage);
 
 		return {
 			status: 200,
 			headers: {
 				'Content-Type': 'application/json'
 			},
-			body: returnedMessage
+			// mind the difference between returning body: returnedMessage and body: { returnedMessage }
+			// Body returned from endpoint request handler must be a plain object
+			body: { returnedMessage }
 		};
 	} catch (error) {
 		console.error(JSON.stringify(error, undefined, 2));

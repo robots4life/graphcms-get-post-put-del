@@ -23,14 +23,31 @@
 				body: payloadJSON
 			});
 
-			const { publishedMessage } = await response.json();
-			console.log(publishedMessage);
+			//
+			// const publishedMessage = await response.text();
+			// console.log(publishedMessage);
+			//
+			getMessages();
 			//
 		} catch (error) {
 			console.log('ERROR');
 			console.log(error);
 		}
 	}
+
+	async function getMessages() {
+		try {
+			const url = '/api.json';
+			const response = await fetch(url);
+			const latestMessages = await response.json();
+			messages = latestMessages;
+			//
+		} catch (error) {
+			console.log('ERROR');
+			console.log(error);
+		}
+	}
+	export let messages;
 </script>
 
 <h1 class="text-6xl">Contact Us Now</h1>
@@ -39,3 +56,12 @@
 <br />
 <button class="text-4xl border-spacing-4" on:click="{() => createMessage()}">Create Message</button>
 <hr />
+<!-- {JSON.stringify(messages, null, 2)} -->
+
+{#each messages as message, index}
+	<p>{index} : {message.id}</p>
+	<p>{message.name}</p>
+	<p>{message.text}</p>
+	<p>{message.price}</p>
+	<hr />
+{/each}
