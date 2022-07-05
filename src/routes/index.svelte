@@ -3,7 +3,11 @@
 	let payload;
 	let payloadJSON;
 
+	let cursorWait = false;
+
 	async function createMessage() {
+		cursorWait = true;
+
 		console.log(text);
 
 		payload = {
@@ -42,6 +46,7 @@
 			const latestMessages = await response.json();
 			messages = latestMessages;
 			//
+			cursorWait = false;
 		} catch (error) {
 			console.log('ERROR');
 			console.log(error);
@@ -52,9 +57,22 @@
 
 <h1 class="text-6xl">Contact Us Now</h1>
 
-<input class="text-4xl" type="text" label="name" name="name" bind:value="{text}" />
-<br />
-<button class="text-4xl border-spacing-4" on:click="{() => createMessage()}">Create Message</button>
+<input
+	class="text-4xl"
+	class:cursorWait
+	disabled="{cursorWait}"
+	type="text"
+	label="name"
+	name="name"
+	bind:value="{text}"
+/>
+<hr />
+<button
+	class="text-4xl border-spacing-4"
+	class:cursorWait
+	disabled="{cursorWait}"
+	on:click="{() => createMessage()}">Create Message</button
+>
 <hr />
 
 <!-- {JSON.stringify(messages, null, 2)} -->
@@ -66,3 +84,9 @@
 	<p>{message.price}</p>
 	<hr />
 {/each}
+
+<style>
+	.cursorWait {
+		cursor: wait;
+	}
+</style>

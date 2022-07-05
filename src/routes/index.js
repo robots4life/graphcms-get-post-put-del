@@ -17,7 +17,7 @@ export async function get() {
 			}
 		`;
 		const messages = await client.request(getMessages);
-		// console.log(messages);
+		console.log(messages);
 
 		return {
 			status: 200,
