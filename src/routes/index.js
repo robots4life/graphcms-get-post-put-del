@@ -8,7 +8,7 @@ export async function get() {
 	try {
 		const getMessages = gql`
 			query getMessages {
-				messages {
+				messages(first: 1000) {
 					id
 					name
 					text

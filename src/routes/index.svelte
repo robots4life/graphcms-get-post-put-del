@@ -7,6 +7,7 @@
 
 	async function createMessage() {
 		cursorWait = true;
+		document.body.classList.add('cursorWait');
 
 		console.log(text);
 
@@ -47,15 +48,30 @@
 			messages = latestMessages;
 			//
 			cursorWait = false;
+			document.body.classList.remove('cursorWait');
 		} catch (error) {
 			console.log('ERROR');
 			console.log(error);
 		}
 	}
 	export let messages;
+
+	function clickedOnBody() {
+		console.log('You just clicked on the body element..');
+	}
 </script>
 
-<svelte:body class:cursorWait />
+<!-- https://github.com/sveltejs/svelte/issues/3105 -->
+<!-- <svelte:body class:cursorWait /> -->
+<svelte:head>
+	{#if cursorWait}
+		<style>
+			body {
+				cursor: wait;
+			}
+		</style>
+	{/if}
+</svelte:head>
 
 <h1 class="text-6xl">Contact Us Now</h1>
 
