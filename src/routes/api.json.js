@@ -13,7 +13,7 @@ export async function get() {
 				}
 			}
 		`;
-		// here messages HAS to be in an object and cannot later be put in an object when returned with the body
+		// here messages HAS to be in an OBJECT and cannot later be put in an object when returned with the body
 		const { messages } = await client.request(getMessages);
 		// console.log(messages);
 

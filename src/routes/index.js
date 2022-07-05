@@ -45,8 +45,8 @@ export async function post() {
 		}
 	`;
 	const variables = {
-		name: 'Mary',
-		text: '27',
+		name: 'Simon',
+		text: '36',
 		price: Date.now()
 	};
 	try {

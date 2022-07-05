@@ -23,8 +23,8 @@
 				body: payloadJSON
 			});
 
-			//
-			// const publishedMessage = await response.text();
+			// The HTML response
+			const publishedMessage = await response.text();
 			// console.log(publishedMessage);
 			//
 			getMessages();
@@ -56,6 +56,7 @@
 <br />
 <button class="text-4xl border-spacing-4" on:click="{() => createMessage()}">Create Message</button>
 <hr />
+
 <!-- {JSON.stringify(messages, null, 2)} -->
 
 {#each messages as message, index}
