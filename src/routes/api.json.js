@@ -16,13 +16,19 @@ export async function get() {
 		`;
 		// here messages HAS to be in an OBJECT and cannot later be put in an object when returned with the body
 		const { messages } = await client.request(getMessages);
-		console.log(messages);
+		// console.log(messages);
 
-		return {
-			status: 200,
-			// mind the difference between returning body: messages and body: { messages }
-			body: messages
-		};
+		if (messages) {
+			return {
+				status: 200,
+				// mind the difference between returning body: messages and body: { messages }
+				body: messages
+			};
+		} else {
+			return {
+				status: 500
+			};
+		}
 	} catch (error) {
 		return {
 			status: 500,

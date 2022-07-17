@@ -45,8 +45,8 @@ export async function post() {
 		}
 	`;
 	const variables = {
-		name: 'Simon',
-		text: '36',
+		name: 'Hans',
+		text: '42',
 		price: Date.now()
 	};
 	try {
@@ -59,19 +59,28 @@ export async function post() {
 			}
 		`;
 		const messageID = { id: createdMessage.createMessage.id };
+
 		const publishedMessage = await client.request(publishMessage, messageID, requestHeaders);
+		console.log(publishedMessage);
+
 		let returnedMessage = JSON.stringify(publishedMessage);
 		console.log(returnedMessage);
 
-		return {
-			status: 200,
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			// mind the difference between returning body: returnedMessage and body: { returnedMessage }
-			// Body returned from endpoint request handler must be a plain object
-			body: { returnedMessage }
-		};
+		if (returnedMessage) {
+			return {
+				status: 200
+				// headers: {
+				// 	'Content-Type': 'application/json'
+				// },
+				// // mind the difference between returning body: returnedMessage and body: { returnedMessage }
+				// // Body returned from endpoint request handler must be a plain object
+				// body: { returnedMessage }
+			};
+		} else {
+			return {
+				status: 500
+			};
+		}
 	} catch (error) {
 		console.error(JSON.stringify(error, undefined, 2));
 
