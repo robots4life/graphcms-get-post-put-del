@@ -97,7 +97,7 @@
 <!-- {JSON.stringify(messages, null, 2)} -->
 
 {#each messages as message, index}
-	<p>{index} : {message.id}</p>
+	<p>{index + 1} : {message.id}</p>
 	<p>{message.name}</p>
 	<p>{message.text}</p>
 	<p>{message.price}</p>

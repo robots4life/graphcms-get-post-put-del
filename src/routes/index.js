@@ -34,22 +34,24 @@ export async function get() {
 }
 
 export async function post() {
-	const createMessage = gql`
-		mutation createMessage($name: String!, $text: String!, $price: Int!) {
-			createMessage(data: { name: $name, text: $text, price: $price }) {
-				id
-				name
-				text
-				price
-			}
-		}
-	`;
 	const variables = {
 		name: 'Hans',
 		text: '42',
 		price: Date.now()
 	};
+
 	try {
+		const createMessage = gql`
+			mutation createMessage($name: String!, $text: String!, $price: Int!) {
+				createMessage(data: { name: $name, text: $text, price: $price }) {
+					id
+					name
+					text
+					price
+				}
+			}
+		`;
+
 		const createdMessage = await client.request(createMessage, variables, requestHeaders);
 		const publishMessage = gql`
 			mutation publishMessage($id: ID!) {
@@ -66,21 +68,9 @@ export async function post() {
 		let returnedMessage = JSON.stringify(publishedMessage);
 		console.log(returnedMessage);
 
-		if (returnedMessage) {
-			return {
-				status: 200
-				// headers: {
-				// 	'Content-Type': 'application/json'
-				// },
-				// // mind the difference between returning body: returnedMessage and body: { returnedMessage }
-				// // Body returned from endpoint request handler must be a plain object
-				// body: { returnedMessage }
-			};
-		} else {
-			return {
-				status: 500
-			};
-		}
+		return {
+			status: 200
+		};
 	} catch (error) {
 		console.error(JSON.stringify(error, undefined, 2));
 
