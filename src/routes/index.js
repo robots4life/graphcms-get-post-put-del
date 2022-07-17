@@ -51,8 +51,9 @@ export async function post() {
 				}
 			}
 		`;
-
 		const createdMessage = await client.request(createMessage, variables, requestHeaders);
+		// CATCH ERROR HERE !!
+
 		const publishMessage = gql`
 			mutation publishMessage($id: ID!) {
 				publishMessage(where: { id: $id }, to: PUBLISHED) {
@@ -61,9 +62,8 @@ export async function post() {
 			}
 		`;
 		const messageID = { id: createdMessage.createMessage.id };
-
 		const publishedMessage = await client.request(publishMessage, messageID, requestHeaders);
-		console.log(publishedMessage);
+		// CATCH ERROR HERE !!
 
 		let returnedMessage = JSON.stringify(publishedMessage);
 		console.log(returnedMessage);
@@ -73,7 +73,6 @@ export async function post() {
 		};
 	} catch (error) {
 		console.error(JSON.stringify(error, undefined, 2));
-
 		return {
 			status: 500,
 			body: {
