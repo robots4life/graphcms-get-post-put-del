@@ -40,36 +40,35 @@ export async function post() {
 		price: Date.now()
 	};
 
-	// const createMessage = gql`
-	// 	mutation createMessage($name: String!, $text: String!, $price: Int!) {
-	// 		createMessage(data: { name: $name, text: $text, price: $price }) {
-	// 			id
-	// 			name
-	// 			text
-	// 			price
-	// 		}
-	// 	}
-	// `;
-	// const createdMessage = await client.request(createMessage, variables, requestHeaders);
-	// // CATCH ERROR HERE !!
+	const createMessage = gql`
+		mutation createMessage($name: String!, $text: String!, $price: Int!) {
+			createMessage(data: { name: $name, text: $text, price: $price }) {
+				id
+				name
+				text
+				price
+			}
+		}
+	`;
+	const createdMessage = await client.request(createMessage, variables, requestHeaders);
+	// CATCH ERROR HERE !!
 
-	// const publishMessage = gql`
-	// 	mutation publishMessage($id: ID!) {
-	// 		publishMessage(where: { id: $id }, to: PUBLISHED) {
-	// 			id
-	// 		}
-	// 	}
-	// `;
-	// const messageID = { id: createdMessage.createMessage.id };
-	// const publishedMessage = await client.request(publishMessage, messageID, requestHeaders);
-	// // CATCH ERROR HERE !!
+	const publishMessage = gql`
+		mutation publishMessage($id: ID!) {
+			publishMessage(where: { id: $id }, to: PUBLISHED) {
+				id
+			}
+		}
+	`;
+	const messageID = { id: createdMessage.createMessage.id };
+	const publishedMessage = await client.request(publishMessage, messageID, requestHeaders);
+	// CATCH ERROR HERE !!
 
-	// let returnedMessage = JSON.stringify(publishedMessage);
-	// console.log(returnedMessage);
+	let returnedMessage = JSON.stringify(publishedMessage);
+	console.log(returnedMessage);
 
 	return {
 		status: 200
 	};
 }
-
-//  https://www.geeksforgeeks.org/explain-promise-all-with-async-await-in-javascript/
+// https://medium.com/swlh/status-codes-in-graphql-4cbf699bc2be
