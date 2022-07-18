@@ -17,26 +17,22 @@ export async function get() {
 			}
 		`;
 		const messages = await client.request(getMessages);
-		// console.log(messages);
+		// console.log(JSON.stringify(messages, undefined, 2));
 
 		return {
 			status: 200,
 			body: messages
 		};
 	} catch (error) {
-		return {
-			status: 500,
-			body: {
-				error: 'Server error : ' + error
-			}
-		};
+		console.error(JSON.stringify(error, undefined, 2));
+		process.exit(1);
 	}
 }
 
 export async function post() {
 	const variables = {
-		name: 'Hans',
-		text: '42',
+		name: 'Jane',
+		text: '24',
 		price: Date.now()
 	};
 
@@ -50,8 +46,6 @@ export async function post() {
 			}
 		}
 	`;
-	const createdMessage = await client.request(createMessage, variables, requestHeaders);
-	// CATCH ERROR HERE !!
 
 	const publishMessage = gql`
 		mutation publishMessage($id: ID!) {
@@ -60,15 +54,31 @@ export async function post() {
 			}
 		}
 	`;
-	const messageID = { id: createdMessage.createMessage.id };
-	const publishedMessage = await client.request(publishMessage, messageID, requestHeaders);
-	// CATCH ERROR HERE !!
 
-	let returnedMessage = JSON.stringify(publishedMessage);
-	console.log(returnedMessage);
+	// https://github.com/prisma-labs/graphql-request#error-handling
 
-	return {
-		status: 200
-	};
+	try {
+		const createdMessage = await client.request(createMessage, variables, requestHeaders);
+		// console.log(JSON.stringify(createdMessage, undefined, 2));
+
+		try {
+			const messageID = { id: createdMessage.createMessage.id };
+			const publishedMessage = await client.request(
+				publishMessage,
+				messageID,
+				requestHeaders
+			);
+			let returnedMessage = JSON.stringify(publishedMessage);
+			// console.log(returnedMessage);
+			return {
+				status: 200
+			};
+		} catch (error) {
+			console.error(JSON.stringify(error, undefined, 2));
+			process.exit(1);
+		}
+	} catch (error) {
+		console.error(JSON.stringify(error, undefined, 2));
+		process.exit(1);
+	}
 }
-// https://medium.com/swlh/status-codes-in-graphql-4cbf699bc2be
